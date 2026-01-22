@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ titulo }} | Isfor{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <div class="card shadow-lg border-0" style="border-radius: 25px; overflow: hidden;">
+            
+            <div class="text-center py-5" style="background: linear-gradient(45deg, var(--rosa-floral), var(--rosa-oscuro)); color: white;">
+                <i class="fas {% if editando %}fa-edit{% else %}fa-plus-circle{% endif %} fa-3x mb-3"></i>
+                <h2 class="fw-bold mb-0">{% if editando %}Actualizar Arreglo{% else %}Crear Nueva Obra{% endif %}</h2>
+                <p class="opacity-75">{% if editando %}Modifica los detalles para mantener tu catálogo al día{% else %}Sube la foto y completa la información básica{% endif %}</p>
+            </div>
+
+            <div class="card-body p-4 p-md-5 bg-white">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="row g-4">
+                        <div class="col-12 mb-2">
+                            <h5 class="text-primary fw-bold mb-3" style="border-left: 4px solid var(--rosa-floral); padding-left: 15px;">
+                                <i class="fas fa-camera me-2"></i> Foto del Arreglo
+                            </h5>
+                            
+                            <div class="row align-items-center bg-light p-3 rounded-4 border">
+                                {% if editando and form.instance.imagen %}
+                                <div class="col-md-4 text-center border-end">
+                                    <label class="form-label d-block text-muted small fw-bold">Imagen Actual</label>
+                                    <img src="{{ form.instance.imagen.url }}" class="rounded-3 shadow-sm border" style="width: 120px; height: 120px; object-fit: cover;">
+                                </div>
+                                {% endif %}
+                                
+                                <div class="{% if editando %}col-md-8{% else %}col-12{% endif %} ps-md-4">
+                                    <label class="form-label text-muted small">{% if editando %}¿Deseas cambiar la foto?{% else %}Selecciona la foto original (se aplicará marca de agua){% endif %}</label>
+                                    <input type="file" name="imagen" class="form-control border-2 shadow-sm" style="border-radius: 10px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <h5 class="text-primary fw-bold mb-3" style="border-left: 4px solid var(--rosa-floral); padding-left: 15px;">
+                                <i class="fas fa-info-circle me-2"></i> Detalles del Producto
+                            </h5>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small d-flex justify-content-between">
+                                Categoría
+                                <a href="{% url 'crear_categoria' %}" class="text-decoration-none fw-bold" style="color: var(--rosa-oscuro);">
+                                    <i class="fas fa-plus-circle"></i> Nueva
+                                </a>
+                            </label>
+                            <select name="categoria" class="form-select border-2 shadow-sm" style="border-radius: 12px;" required>
+                                <option value="" disabled {% if not editando %}selected{% endif %}>-- Selecciona una --</option>
+                                {% for cat in form.categoria.field.queryset %}
+                                    <option value="{{ cat.id }}" {% if cat.id == form.instance.categoria.id %}selected{% endif %}>
+                                        {{ cat.nombre }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small">Nombre del Arreglo</label>
+                            <input type="text" name="nombre" value="{{ form.nombre.value|default:'' }}" 
+                                   class="form-control border-2 shadow-sm" style="border-radius: 12px;" 
+                                   placeholder="Ej: Ramo de Rosas Rojas" required>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-bold text-muted small">Descripción para el cliente</label>
+                            <textarea name="descripcion" rows="3" class="form-control border-2 shadow-sm" 
+                                      style="border-radius: 12px;" placeholder="Detalla qué flores incluye, colores, etc...">{{ form.descripcion.value|default:'' }}</textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small">Precio Base ($)</label>
+                            <div class="input-group">
+                                <span class="input-group-text border-2 bg-white" style="border-radius: 12px 0 0 12px;">$</span>
+                                <input type="number" step="0.01" name="precio_base" 
+                                       value="{{ form.precio_base.value|stringformat:'.2f'|default:'' }}" 
+                                       class="form-control border-2 border-start-0 shadow-sm" style="border-radius: 0 12px 12px 0;" 
+                                       placeholder="0.00" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small">Tiempo de Preparación</label>
+                            <div class="input-group">
+                                <span class="input-group-text border-2 bg-white" style="border-radius: 12px 0 0 12px;"><i class="fas fa-clock text-muted"></i></span>
+                                <input type="text" name="tiempo_preparacion" value="{{ form.tiempo_preparacion.value|default:'' }}" 
+                                       class="form-control border-2 border-start-0 shadow-sm" style="border-radius: 0 12px 12px 0;" 
+                                       placeholder="Ej: 2 horas" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-md-8 mb-2">
+                            <button type="submit" class="btn btn-lg w-100 shadow fw-bold text-white" 
+                                    style="background: #25d366; border-radius: 15px; padding: 15px; transition: 0.3s;">
+                                <i class="fas fa-save me-2"></i> {% if editando %}GUARDAR CAMBIOS{% else %}PUBLICAR EN CATÁLOGO{% endif %}
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{% url 'gestionar_inventario' %}" class="btn btn-lg btn-light w-100 border text-muted fw-bold" 
+                               style="border-radius: 15px; padding: 15px;">
+                                CANCELAR
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Efectos de Focus */
+    .form-control:focus, .form-select:focus {
+        border-color: var(--rosa-floral) !important;
+        box-shadow: 0 0 0 0.25rem rgba(255, 133, 162, 0.1) !important;
+    }
+    
+    /* Animación del botón principal */
+    .btn-lg:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+    }
+</style>
+{% endblock %}

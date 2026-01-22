@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Página no encontrada | Isfor{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center text-center" style="min-height: 60vh;">
+    <div class="col-md-7">
+        <div class="mb-4">
+            <span class="fa-stack fa-4x">
+                <i class="fas fa-seedling fa-stack-1x text-muted"></i>
+                <i class="fas fa-ban fa-stack-2x text-danger opacity-25"></i>
+            </span>
+        </div>
+        
+        <h1 class="display-4 fw-bold" style="color: var(--rosa-oscuro);">¡Oh no!</h1>
+        <h3 class="fw-light mb-4">Esta flor no parece estar en nuestro jardín.</h3>
+        
+        <p class="text-muted mb-5">
+            La página que buscas no existe o fue movida a otra categoría. 
+            No te preocupes, puedes seguir viendo nuestros hermosos arreglos.
+        </p>
+
+        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+            <a href="{% url 'index' %}" class="btn btn-lg px-5 shadow-sm text-white" 
+               style="background-color: var(--rosa-floral); border-radius: 50px;">
+                <i class="fas fa-home me-2"></i> Ir al Inicio
+            </a>
+            <a href="{% url 'catalogo' %}" class="btn btn-lg btn-outline-secondary px-5" 
+               style="border-radius: 50px;">
+                <i class="fas fa-th-large me-2"></i> Ver Catálogo
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

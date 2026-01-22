@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Ingreso Administrativo | Isfor{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-lg border-0" style="border-radius: 20px; overflow: hidden;">
+            
+            <div class="text-center py-4" style="background-color: var(--rosa-floral); color: white;">
+                <i class="fas fa-user-circle fa-3x mb-2"></i>
+                <h3 class="fw-bold mb-0">Bienvenido/a 🌸</h3>
+                <small>Panel de Control Isfor</small>
+            </div>
+
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label fw-bold text-muted">
+                            <i class="fas fa-envelope me-1"></i> Usuario
+                        </label>
+                        <input type="text" name="username" id="id_username" 
+                               class="form-control form-control-lg border-2" 
+                               style="border-color: #ffe0e9; border-radius: 12px;" 
+                               placeholder="Ingresa tu usuario" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="id_password" class="form-label fw-bold text-muted">
+                            <i class="fas fa-lock me-1"></i> Contraseña
+                        </label>
+                        <input type="password" name="password" id="id_password" 
+                               class="form-control form-control-lg border-2" 
+                               style="border-color: #ffe0e9; border-radius: 12px;" 
+                               placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-lg w-100 shadow-sm fw-bold" 
+                            style="background-color: var(--rosa-floral); color: white; border-radius: 12px; transition: 0.3s;">
+                        Entrar ahora <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </form>
+            </div>
+            
+            <div class="card-footer bg-white border-0 text-center pb-4">
+                <a href="{% url 'index' %}" class="text-decoration-none text-muted small">
+                    <i class="fas fa-chevron-left"></i> Volver a la tienda
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Efecto hover en el botón */
+    .btn:hover {
+        background-color: var(--rosa-oscuro) !important;
+        transform: translateY(-2px);
+    }
+    /* Estilo para los inputs al hacer clic */
+    .form-control:focus {
+        border-color: var(--rosa-floral) !important;
+        box-shadow: 0 0 0 0.25rem rgba(255, 133, 162, 0.25);
+    }
+</style>
+{% endblock %}

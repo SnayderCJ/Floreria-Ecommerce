@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventario | Isfor{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-6">
+        <h2 class="fw-bold" style="color: var(--rosa-oscuro);">
+            <i class="fas fa-clipboard-list me-2"></i>Gestión de Inventario
+        </h2>
+        <p class="text-muted mb-0">Administra los arreglos y categorías de tu catálogo.</p>
+    </div>
+    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+        <div class="d-flex flex-wrap justify-content-md-end gap-2">
+            <a href="{% url 'gestionar_categorias' %}" class="btn btn-outline-secondary rounded-pill fw-bold shadow-sm px-4">
+                <i class="fas fa-folder-open me-2"></i>Categorías
+            </a>
+            <a href="{% url 'subir_arreglo' %}" class="btn btn-subir-premium">
+                <i class="fas fa-plus-circle me-2"></i>Nuevo Arreglo
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead style="background-color: #fff0f5;">
+                <tr>
+                    <th class="ps-4 py-3">Imagen</th>
+                    <th class="py-3">Nombre del Arreglo</th>
+                    <th class="py-3 text-center">Categoría</th>
+                    <th class="py-3 text-center">Precio</th>
+                    <th class="py-3 text-center pe-4">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td class="ps-4">
+                        <img src="{{ producto.imagen.url }}" 
+                             alt="{{ producto.nombre }}" 
+                             class="rounded-3 shadow-sm" 
+                             style="width: 70px; height: 70px; object-fit: cover; border: 2px solid #fff;">
+                    </td>
+                    <td>
+                        <div class="fw-bold text-dark">{{ producto.nombre }}</div>
+                        <small class="text-muted">ID: #{{ producto.id }}</small>
+                    </td>
+                    <td class="text-center">
+                        <span class="badge rounded-pill px-3 py-2" 
+                              style="background-color: #ffe0e9; color: var(--rosa-oscuro);">
+                            {{ producto.categoria.nombre }}
+                        </span>
+                    </td>
+                    <td class="text-center fw-bold text-success">
+                        ${{ producto.precio_base }}
+                    </td>
+                    <td class="text-center pe-4">
+                        <div class="btn-group shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                            <a href="{% url 'editar_arreglo' producto.pk %}" 
+                               class="btn btn-white border-end" 
+                               title="Editar producto" 
+                               style="background: white; color: #4e73df;">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'eliminar_arreglo' producto.pk %}" 
+                               class="btn btn-white text-danger" 
+                               title="Eliminar producto" 
+                               style="background: white;">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-5">
+                        <div class="text-muted">
+                            <i class="fas fa-search fa-3x mb-3 opacity-25"></i>
+                            <p>Aún no has subido ningún arreglo floral.</p>
+                            <a href="{% url 'subir_arreglo' %}" class="btn btn-link text-decoration-none">
+                                ¡Empieza subiendo el primero aquí!
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    /* Efecto de hover suave en las filas */
+    .table tbody tr {
+        transition: background-color 0.2s;
+    }
+    .table tbody tr:hover {
+        background-color: #fff9fa !important;
+    }
+    
+    /* Estilo para los botones del grupo */
+    .btn-group .btn:hover {
+        background-color: #f8f9fa !important;
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
