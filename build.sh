@@ -6,7 +6,8 @@ set -o errexit
 pip install -r requirements.txt
 
 # Recolectar archivos estáticos
-python manage.py collectstatic --no-input
+mkdir -p staticfiles
+python manage.py collectstatic --no-input --clear
 
 # Aplicar migraciones a la base de datos
 python manage.py migrate
